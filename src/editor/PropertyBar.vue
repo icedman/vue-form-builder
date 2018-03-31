@@ -1,17 +1,18 @@
 <template>
 <aside class="menu" :style="getMenuStyle()">
+<div style="min-width:200px">
   <ul class="menu-list">
     <li v-if="getActiveItem()">
         <div style="display: flex">
         <span style="flex:1">{{getActiveItem().name}}</span>
-        <button class="button is-danger is-small is-right" @click="commands.deleteActive()"><i class="fa fa-trash"></i>Delete</button>
+        <button class="button is-danger is-small is-right" @click="deleteActiveItem()"><i class="fa fa-trash"></i>Delete</button>
         </div>
     </li>
-    <li v-for="attribute in getAttributes()">
+    <li v-for="option in getOptions()">
       <a>
-        <label class="label">{{attribute.title}}</label>
-        <input class="input" type="text" :name="attribute.name" :value="attribute.value"
-            @change="changed($event, attribute.name)"
+        <label class="label">{{option.title}}</label>
+        <input class="input" type="text" :name="option.name" :value="option.value"
+            @change="changed($event, option)"
         >
       </a>
     </li>
@@ -24,13 +25,19 @@
         </div>
     </li>
   </ul>
+
+    <ul v-if="getActiveItem()">
+      <li v-if="$store.state.editor.drag">Drag: {{$store.state.editor.drag.name}}</li>
+      <li v-if="$store.state.editor.drop">Drop: {{$store.state.editor.drop.name}}</li>
+      <li v-if="$store.state.editor.active">Active: {{$store.state.editor.active.name}}</li>
+    </ul>
+
+    <!-- {{$store.state.editor.active}} -->
+</div>
 </aside>
 </template>
 
 <script>
-import Components from './components'
-import { _ } from '../../support.js'
-
 export default {
   data () {
     return {
@@ -38,15 +45,17 @@ export default {
     }
   },
 
-  props: {
-    commands: Object
-  },
-
   methods: {
     getActiveItem() {
-    if (!this.commands.activeItem)
-        return null
-      return this.commands.activeItem()
+        return this.$store.state.editor.active
+    },
+
+    deleteActiveItem() {
+        var item = this.getActiveItem()
+        if (!item) {
+            return
+        }
+        this.$store.commit('editor/deleteItem', item)
     },
 
     getMenuStyle() {
@@ -56,63 +65,83 @@ export default {
         return {width:'0px'}
     },
 
-    getAttributes () {
-        var activeItem = this.getActiveItem()
-        if (!activeItem)
-            return []
-
-        var attrs = []
-        var tpl = Components.templates.find(t=>t.name==activeItem.name)
-        if (tpl) {
-            var template = tpl.template
-
-            var moreAttributes = []
-            var keys = Object.keys(activeItem.attributes)
-            keys.forEach(k=> {
-                if (tpl.attributes.find(a=>a.name==k)) {
-                    return
-                }
-                moreAttributes.push({name:k,title:k,value:activeItem.attributes[k]})
-            })
-            
-            activeItem.attributes = activeItem.attributes || {}
-            for(var attr of [...tpl.attributes, ...moreAttributes]) {
-                var value = activeItem.attributes[attr.name] || ''
-                var activeAttribute = attrs.find(a=> {
-                    a.name == attr.name
-                })
-                if (value == '')
-                    value = null
-                if (activeAttribute) {
-                    activeAttribute.value = value
-                } else {
-                    attrs.push(Object.assign(attr,{value:value}))
-                }
-            }
-        }
-
-        return attrs;
-    },
-
-    changed: _.debounce(function (event, attribute) {
-        var attributes = {}
-        attributes[attribute] = event.srcElement.value
-        this.commands.setAttributes(attributes)
-    }, 250),
-
-    addAttribute() {
-        if (this.newAttribute == '' || !this.newAttribute) {
+    getOptions () {
+        var item = this.getActiveItem()
+        if (!item) {
             return
         }
+        var component = this.$editor.getComponentByName(item.name)
+        var opts = []
+        var defs = []
+        if (component.options) {
+            defs = [...component.options]
+        }
+        if (item.options) {
+            var compOptions = defs.map(o=>o.name)
+            Object.keys(item.options).forEach(k=>{
+                if (compOptions.indexOf(k)!=-1)
+                    return
+                defs.push({name:k,title:k})
+            })
+        }
+        defs.forEach(opt=>{
+            var value = ''
+            if (item.options) {
+                if (item.options[opt.name]) {
+                    value = item.options[opt.name]
+                }
+            }
+            opts.push({
+                name: opt.name,
+                title: opt.title,
+                value: value
+            })
+        })
+        return opts
+    },
 
-        var attributes = {}
-        attributes[this.newAttribute] = ''
+    addAttribute() {
+        if (this.newAttribute == '' ) {
+            return
+        }
+        var attribute = this.newAttribute
         this.newAttribute = ''
-        this.commands.setAttributes(attributes)
+        var item = this.getActiveItem()
+        if (!item) {
+            return
+        }
+        if (!item.options) {
+            this.$set(item, 'options', {})
+        }
+
+        if (!item.options[attribute]) {
+            this.$set(item.options, attribute, '')
+        }
+    },
+
+    changed (event, option) {
+        var item = this.getActiveItem()
+        if (!item) {
+            return
+        }
+        var value = event.srcElement.value
+        // warning.. we're not state.committing here
+        if (!item.options) {
+            this.$set(item, 'options', {})
+        }
+        if (!item.options[option.name]) {
+            this.$set(item.options, option.name, '')
+        }
+        if (value == '') {
+            this.$delete(item.options, option.name)
+        } else {
+            item.options[option.name] = value
+        }
     }
   },
 
   mounted () {
+    
   }
 }
 </script>
@@ -123,5 +152,9 @@ export default {
 }
 .menu {
     transition: width 500ms;
+    overflow-x: hidden;
+}
+button i {
+    padding-right: 4px;
 }
 </style>

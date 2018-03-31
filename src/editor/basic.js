@@ -21,7 +21,13 @@ export default {
     },
     'input': {
         name: 'input',
-        title: 'Input'
+        title: 'Input',
+        options: [
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' },
+            { name: 'label', title: 'Label' },
+            { name: 'placeholder', title: 'Placeholder' }
+        ]
     },
     'checkbox': {
         name: 'checkbox',
@@ -29,7 +35,11 @@ export default {
     },
     'button': {
         name: 'button',
-        title: 'Button'
+        title: 'Button',
+        options: [
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' }
+        ]
     }
   }
 }

@@ -17,23 +17,15 @@
 -->
 
 <div class="workspace-container">
-
-<div class="padded" style="overflow-y: auto; xxmin-height:1200px">
+<div class="padded" style="overflow-y: auto; min-height:1200px">
 <sidebar></sidebar>
 </div>
 
 <ui-node :node="$store.state.editor.root" class="workspace padded"></ui-node>
 
+<div class="padded" style="overflow-y: auto;">
+<property></property>
 </div>
-
-<div  style="width:300px">
-<ul>
-  <li>Drag: {{$store.state.editor.drag}}</li>
-  <li>Drop: {{$store.state.editor.drop}}</li>
-  <li>Active: {{$store.state.editor.active}}</li>
-</ul>
-<button class="button" @click="loadFromLocalStorage()">Load</button>
-<button class="button" @click="saveToLocalStorage()">Save</button>
 </div>
 
 </ion-content>
@@ -41,6 +33,7 @@
 
 <script>
 import Sidebar from '../editor/Sidebar'
+import PropertyBar from '../editor/PropertyBar'
 import UINode from '../editor/UINode'
 
 export default {
@@ -67,11 +60,21 @@ export default {
   },
 
   mounted () {
+    this.$store.commit('ui/setSubMenu', [
+        { cmd: ()=>this.loadFromLocalStorage(), title: 'Load', icon: 'fa fa-folder-open' },
+        { cmd: ()=>this.saveToLocalStorage(), title: 'Save', icon: 'fa fa-save' },
+        { cmd: ()=>{}, title: 'Render', icon: 'fa fa-cogs' }
+      ])
     this.loadFromLocalStorage()
+  },
+
+  beforeDestroyed() {
+    this.$store.commit('ui/setSubMenuItems', [])
   },
 
   components: {
     'sidebar': Sidebar,
+    'property': PropertyBar,
     'ui-node': UINode,
   }
 }
@@ -93,6 +96,10 @@ export default {
   flex: 1;
   background: #f0f0f0;
   padding: 30px;
+  border: 2px solid transparent;
+}
+.workspace.ui-active.item {
+  border: 2px solid transparent !important; 
 }
 </style>
 

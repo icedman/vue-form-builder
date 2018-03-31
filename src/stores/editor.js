@@ -1,3 +1,5 @@
+import { _ } from '../libs/lodash.js'
+
 let state = {
   root: { id: 0, name: 'basic::column', children: []},
   drag: null,
@@ -25,6 +27,17 @@ let mutations = {
     },
     setRoot(state, root) {
         state.root = root
+    },
+    deleteItem(state, component) {
+        var node = _.tree.findById(state.root, component.id)
+        if (!node) {
+          return
+        }
+        var parent = _.tree.findById(state.root, node.parent)
+        if (!parent) {
+          return
+        }
+        _.tree.removeChild(parent, node)
     }
 }
 

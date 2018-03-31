@@ -25,13 +25,21 @@ const tree = {
     return null
   },
 
-  appendChild(parent, node, root) {
+  appendChild(parent, node, idx) {
     if (!node.id) {
       node.id = tree.guid()
     }
     node.parent = parent.id
     parent.children = parent.children || []
-    parent.children = [...parent.children, node]
+    if (idx != null && idx != undefined && idx >= 0) {
+      parent.children.splice(idx, 0, node)
+      return
+    }
+    parent.children.push(node)
+  },
+
+  getChildIndex(parent, child) {
+    return (parent.children || []).map(c=>c.id).indexOf(child.id)
   },
 
   removeChild(parent, node) {

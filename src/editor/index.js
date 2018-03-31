@@ -51,6 +51,7 @@ class Editor {
     canDropItemTo (item, to) {
         item = this.getComponentByName(item)
         to = this.getComponentByName(to)
+
         if (to.container) {
             if (to.container.accepts) {
                 return to.container.accepts.indexOf(item.baseName)!=-1

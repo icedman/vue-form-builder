@@ -22,20 +22,23 @@
 
   <div id="navMenuToggled" class="navbar-menu" :class="menuActiveClass">
     <div class="navbar-start">
-    <router-link v-for="item in menuItems" v-if="!item.right" :to="item.path" class="navbar-item is-hoverable" :key="item.id">
-      <span class="icon" v-if="item.icon">
-        <i :class="item.icon"></i>
-      </span>
+    
+    <router-link v-for="item in menuItems" v-if="!item.right && item.path" :to="item.path" class="navbar-item is-hoverable" :key="item.id">
+        <i :class="item.icon" v-if="item.icon"></i>
       <span class="navbar-item-text is-hidden-diesktop">{{item.title}}</span>
     </router-link>
+
+    <a v-for="item in menuItems" v-if="item.cmd" :to="item.path" class="navbar-item is-hoverable" :key="item.id" @click="item.cmd()">
+        <i :class="item.icon" v-if="item.icon"></i>
+      <span class="navbar-item-text is-hidden-diesktop">{{item.title}}</span>
+    </a>
+
     </div>
 
     <div class="navbar-end">
 
     <router-link v-for="item in menuItems" v-if="item.right" :to="item.path" class="navbar-item is-hoverable" :key="item.id">
-      <span class="icon">
-        <i :class="item.icon"></i>
-      </span>
+        <i :class="item.icon" v-if="item.icon"></i>
       <span class="navbar-item-text is-hidden-diesktop">{{item.title}}</span>
     </router-link>
 
@@ -58,7 +61,7 @@ export default {
 
   computed: {
     menuItems() {
-      return this.$store.state.ui.menu.items
+      return [...this.$store.state.ui.menu.items, ...this.$store.state.ui.menu.submenu]
     },
 
     showBackButton() {
@@ -83,7 +86,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped>
 .navbar-item.is-mega {
   position: static;
   .is-mega-menu-title {
@@ -92,12 +95,12 @@ export default {
   }
 }
 .navbar-item {
-    font-size:14pt;
-}
-.navbar-item-text {
-    padding-right:10px;
+  font-size:16pt;
 }
 .navbar-burger span {
   pointer-events:none;
+}
+i.fa {
+  padding-right: 8px;
 }
 </style>
