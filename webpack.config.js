@@ -67,6 +67,11 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader',
+        exclude: /node_modules/
       }
     ]
   },

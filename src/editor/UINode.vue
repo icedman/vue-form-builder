@@ -133,13 +133,18 @@ export default {
 
     canDrop (event, target) {
       var dragName = this.$store.state.editor.drag.name
-      if (this.$store.state.editor.drag.id == target.id)
+      if (this.$store.state.editor.drag.id == target.id) {
+        console.log('self!')
+        event.preventDefault()
+        event.stopPropagation()
         return
+      }
 
       var target = {name:target.name, id:target.id, idx:null}
 
       var targetComponent = this.$editor.getComponentByName(target.name)
       if (!targetComponent.container) {
+
         var targetNode = this.$_.tree.findById(this.$store.state.editor.root, target.id)
         var parentNode = this.$_.tree.findById(this.$store.state.editor.root, targetNode.parent)
         if (parentNode) {
@@ -179,6 +184,7 @@ div {
 }
 .ui-drag-item {
   border: 2px solid red;
+  opacity: 0.15;
 }
 .ui-drop-target {
   border: 2px solid black;

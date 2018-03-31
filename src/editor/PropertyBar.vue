@@ -26,7 +26,7 @@
     </li>
   </ul>
 
-    <ul v-if="getActiveItem()">
+    <ul xxv-if="getActiveItem()">
       <li v-if="$store.state.editor.drag">Drag: {{$store.state.editor.drag.name}}</li>
       <li v-if="$store.state.editor.drop">Drop: {{$store.state.editor.drop.name}}</li>
       <li v-if="$store.state.editor.active">Active: {{$store.state.editor.active.name}}</li>
@@ -60,9 +60,9 @@ export default {
 
     getMenuStyle() {
         if (this.getActiveItem()) {
-            return {width:'240px'}
+            // return {width:'240px'}
         }
-        return {width:'0px'}
+        // return {width:'0px'}
     },
 
     getOptions () {
