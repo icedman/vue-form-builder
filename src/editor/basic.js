@@ -10,14 +10,39 @@ export default {
         title: 'Row',
         container: {
             class: 'columns'
-        }
+        },
+        options: [
+            { name: 'class', title: 'Class' }
+        ]
     },
     'column': {
         name: 'column',
         title: 'Column',
         container: {
             class: 'column'
-        }
+        },
+        options: [
+            { name: 'class', title: 'Class' }
+        ]
+    },
+    'container': {
+        name: 'container',
+        title: 'Container',
+        container: {
+            class: ''
+        },
+        options: [
+            { name: 'class', title: 'Class' }
+        ]
+    },
+    'button': {
+        name: 'button',
+        title: 'Button',
+        options: [
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' },
+            { name: 'label', title: 'Label', default: 'Button' },
+        ]
     },
     'input': {
         name: 'input',
@@ -33,13 +58,17 @@ export default {
         name: 'checkbox',
         title: 'Checkbox'
     },
-    'button': {
-        name: 'button',
-        title: 'Button',
-        options: [
-            { name: 'class', title: 'Class' },
-            { name: 'style', title: 'Style' }
-        ]
+    'radio': {
+        name: 'radio',
+        title: 'Radio'
+    },
+    'textarea': {
+        name: 'textarea',
+        title: 'Textarea'
+    },
+    'select': {
+        name: 'select',
+        title: 'Select'
     }
   }
 }

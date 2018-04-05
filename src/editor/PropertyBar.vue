@@ -11,16 +11,19 @@
     <li v-for="option in getOptions()">
       <a>
         <label class="label">{{option.title}}</label>
-        <input class="input" type="text" :name="option.name" :value="option.value"
+        <input v-if="!option.content" class="input" type="text" :name="option.name" :value="option.value"
             @change="changed($event, option)"
         >
+        <textarea v-if="option.content" class="textarea" type="text" :name="option.name" v-html="option.value"
+            @change="changed($event, option)"
+        ></textarea>
       </a>
     </li>
     <li>
         <div class="control padded" v-if="getActiveItem()">
             <hr>
 
-        <input class="input attr-name" type="text" placeholder="Attribute Name" v-model="newAttribute">
+        <input @keyup.enter="addAttribute()" class="input attr-name" type="text" placeholder="Attribute Name" v-model="newAttribute">
         <button class="button is-small" @click="addAttribute()"><i class="fa fa-plus"></i>Add Attribute</button>
         </div>
     </li>
@@ -94,13 +97,14 @@ export default {
             opts.push({
                 name: opt.name,
                 title: opt.title,
-                value: value
+                value: value,
+                content: opt.content ? true : false
             })
         })
         return opts
     },
 
-    addAttribute() {
+    addAttribute () {
         if (this.newAttribute == '' ) {
             return
         }

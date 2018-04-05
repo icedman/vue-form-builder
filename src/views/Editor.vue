@@ -21,7 +21,8 @@
 <sidebar></sidebar>
 </div>
 
-<ui-node :node="$store.state.editor.root" class="workspace padded"></ui-node>
+<ui-node v-if="!previewMode" :node="$store.state.editor.root" class="workspace padded"></ui-node>
+<rendered-node v-if="previewMode" :node="$store.state.editor.root" class="workspace padded"></rendered-node>
 
 <div class="padded" style="overflow-y: auto;">
 <property></property>
@@ -35,10 +36,12 @@
 import Sidebar from '../editor/Sidebar'
 import PropertyBar from '../editor/PropertyBar'
 import UINode from '../editor/UINode'
+import RenderedNode from '../editor/RenderedNode'
 
 export default {
   data () {
     return {
+      previewMode: false
     }
   },
 
@@ -56,6 +59,11 @@ export default {
 
     saveToLocalStorage () {
       window.localStorage.setItem('editor-root', JSON.stringify(this.$store.state.editor.root))
+    },
+
+    renderForm () {
+      this.$store.commit('editor/setActive', null)
+      this.previewMode = !this.previewMode
     }
   },
 
@@ -63,7 +71,7 @@ export default {
     this.$store.commit('ui/setSubMenu', [
         { cmd: ()=>this.loadFromLocalStorage(), title: 'Load', icon: 'fa fa-folder-open' },
         { cmd: ()=>this.saveToLocalStorage(), title: 'Save', icon: 'fa fa-save' },
-        { cmd: ()=>{}, title: 'Render', icon: 'fa fa-cogs' }
+        { cmd: ()=>this.renderForm(), title: 'Preview', icon: 'fa fa-cogs' }
       ])
     this.loadFromLocalStorage()
   },
@@ -76,12 +84,16 @@ export default {
     'sidebar': Sidebar,
     'property': PropertyBar,
     'ui-node': UINode,
+    'rendered-node': RenderedNode,
   }
 }
 </script>
 
 
-<style scoped>
+<style>
+div {
+  transition: border 500ms;
+}
 .animated {
   height: 0px;
   transition: height 250ms

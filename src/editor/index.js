@@ -1,4 +1,5 @@
 import Basic from './basic.js'
+import Html from './html.js'
 
 class Editor {
     constructor(components) {
@@ -64,6 +65,7 @@ class Editor {
 
 export var Components = new Editor({
   modules: {
-    [Basic.name]: Basic
+    [Basic.name]: Basic,
+    [Html.name]: Html,
   }
 })

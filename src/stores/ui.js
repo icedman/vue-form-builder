@@ -2,7 +2,7 @@ let state = {
   menu: { active: false,
     items: [
       { path:'/editor/workspace', title: 'Editor' },
-      { path:'/auth/login', title: 'Logout', icon:'fa fa-sign-out-alt', right: true }
+      // { path:'/auth/login', title: 'Logout', icon:'fa fa-sign-out-alt', right: true }
     ],
     submenu: []
   },

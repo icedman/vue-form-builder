@@ -1,7 +1,7 @@
 <template>
 <div class="ui-component" id="row">
     <div class="ui-list-item">
-        <i class="fa fa-th-list"> </i> <span>Row</span>
+        <i class="icon-sprite icon-row"> </i> <span>Row</span>
     </div>
     <div class="ui-template">
     </div>
@@ -9,15 +9,32 @@
 
 <div class="ui-component" id="column">
     <div class="ui-list-item">
-        <i class="fa fa-pause"> </i> <span>Column</span>
+        <i class="icon-sprite icon-column"> </i> <span>Column</span>
     </div>
     <div class="ui-template">
     </div>
 </div>
 
+<div class="ui-component" id="container">
+    <div class="ui-list-item">
+        <i class="icon-sprite icon-container"> </i> <span>Container</span>
+    </div>
+    <div class="ui-template">
+    </div>
+</div>
+
+<div class="ui-component" id="button">
+    <div class="ui-list-item">
+        <i class="icon-sprite icon-button"> </i><span>Button</span>
+    </div>
+    <div class="ui-template">
+        <button class="button ${this.class}" data-ui-inject="true">${this.label}</button>
+    </div>
+</div>
+
 <div class="ui-component" id="input">
     <div class="ui-list-item">
-        <i class="fa fa-square"> </i> <span>Input Text</span>
+        <i class="icon-sprite icon-text"> </i> <span>Input Text</span>
     </div>
     <div class="ui-template">
         <input class="input ${this.class}" type="text" data-ui-inject="true" value=""/>
@@ -26,7 +43,7 @@
 
 <div class="ui-component" id="checkbox">
     <div class="ui-list-item">
-        <i class="fa fa-check-square"> </i> <span>Checkbox</span>
+        <i class="icon-sprite icon-checkbox"> </i> <span>Checkbox</span>
     </div>
     <div class="ui-template">
         <label>Check</label>
@@ -36,11 +53,11 @@
 
 <div class="ui-component" id="radio">
     <div class="ui-list-item">
-        <i class="fa fa-dot-circle"> </i> <span>Radio</span>
+        <i class="icon-sprite icon-radio"> </i> <span>Radio</span>
     </div>
     <div class="ui-template">
         <label>Radio</label>
-        <input class="${this.class}" type="text"/>
+        <input class="${this.class}" type="radio"/>
     </div>
 </div>
 
@@ -55,19 +72,19 @@
 
 <div class="ui-component" id="select">
     <div class="ui-list-item">
-        <i class="fa fa fa-list-alt"> </i> <span>Select</span>
+        <i class="icon-sprite icon-select"> </i> <span>Select</span>
     </div>
     <div class="ui-template">
-        <input class="${this.class}" type="text"/>
+        <select class="${this.class}"> </select>
     </div>
 </div>
 
 <div class="ui-component" id="textarea">
     <div class="ui-list-item">
-        <i class="fa fa-align-justify"> </i> <span>Textarea</span>
+        <i class="icon-sprite icon-textarea"> </i> <span>Textarea</span>
     </div>
     <div class="ui-template">
-        <input class="${this.class}" type="text"/>
+        <textarea class="${this.class}" type="text"> </textarea>
     </div>
 </div>
 
@@ -79,15 +96,5 @@
         <input class="${this.class}" type="text"/>
     </div>
 </div>
-
-<div class="ui-component" id="button">
-    <div class="ui-list-item">
-        <i class="fa fa-play"> </i> <span>Button</span>
-    </div>
-    <div class="ui-template">
-        <button class="button ${this.class}" data-ui-inject="true">Button</button>
-    </div>
-</div>
-
 
 </template>

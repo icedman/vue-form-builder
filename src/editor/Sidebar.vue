@@ -1,18 +1,18 @@
 <template>
-<aside class="menu" style="min-width:120px">
+<aside class="menu" style="width:260px">
   <div v-for="module in modules">
   <p class="menu-label">
     {{module.title}}
   </p>  
-  <ul class="menu-list">
+  <ul class="menu-list float-left">
     <li draggable v-for="component in module.components" 
       @drag="dragStart($event, component)" 
-      @dragend="dragEnd($event, component)">
+      @dragend="dragEnd($event, component)" style="text-align:center; border:2px">
       <a v-html="component['list-item']">
       </a>
     </li>
   </ul>
-  <hr>
+  <hr style="clear:both">
   </div>
 </aside>
 </template>
@@ -64,15 +64,67 @@ export default {
 }
 </script>
 
-<style scoped>
-.menu-list li a {
+<style>
+.menu-list.float-left li {
+  margin:0px;
+  float:left;
+}
+.menu-list.float-left li a {
   border: 1px solid transparent;
   border-radius: 0px;
+  width: 120px;
 }
 .menu-list i.fa {
   padding-right: 6px;
 }
-.is-dragged {
-  border: 2px solid red;
+.menu-list i.icon-sprite {
+  display: block;
+  width: 80px;
+  height: 50px;
+  background: url('/dist/components-sprite.png');
+  background-position:  0px calc(-84*0px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 2px solid transparent;
+  margin-left: 8px;
+}
+.menu-list i.icon-sprite.icon-row {
+  background-position: 0px calc(-84*0px);
+}
+.menu-list i.icon-sprite.icon-column {
+  background-position: 0px calc(-84*1px);
+}
+.menu-list i.icon-sprite.icon-button {
+  background-position: 0px calc(-84*2px);
+}
+.menu-list i.icon-sprite.icon-checkbox {
+  background-position: 0px calc(-84*3px);
+}
+.menu-list i.icon-sprite.icon-text {
+  background-position: 0px calc(-84*10.11px);
+}
+.menu-list i.icon-sprite.icon-radio {
+  background-position: 0px calc(-84*16.06px);
+}
+.menu-list i.icon-sprite.icon-textarea {
+  background-position: 0px calc(-84*22.06px);
+}
+.menu-list i.icon-sprite.icon-select {
+  background-position: 0px calc(-84*19.06px);
+}
+.menu-list i.icon-sprite.icon-container {
+  background-position: 0px calc(-84*29.15px);
+}
+.menu-list i.icon-sprite.icon-link {
+  background-position: 0px calc(-84*8px);
+}
+.menu-list i.icon-sprite.icon-image {
+  background-position: 0px calc(-84*9px);
+}
+.menu-list i.icon-sprite.icon-heading {
+  background-position: 0px calc(-84*7px);
+}
+.menu-list i.icon-sprite.icon-paragraph {
+  background-position: 0px calc(-84*15.1px);
 }
 </style>

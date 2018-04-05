@@ -25,8 +25,8 @@ export default {
     html () {
       // todo move to renderer library
       var comp = this.$editor.getComponentByName(this.node.name)
-      if (comp.container && (!this.node.children || !this.node.children.length)) {
-        return `<span class="padded">${comp.baseName}</span>`
+      if (this.node.id != 0 && comp.container) {
+        return `<span class="tag is-warning" style="">${comp.baseName}</span>`
       }
       if (comp && comp.template) {
         try {
@@ -125,6 +125,31 @@ export default {
       event.stopPropagation()
 
       if (targetNode) {
+
+        if (dropTarget.id == dragItem.id) {
+          return
+        }
+
+        var component = this.$editor.getComponentByName(dragItem.name)
+
+        // set defaults
+        if (component.options) {
+          dragItem.options = dragItem.options || {}
+          Object.values(component.options).forEach(entry=>{
+            if (!(dragItem.options[entry.name] || !dragItem.options[entry.name]=='')
+                && entry.default) {
+              this.$set(dragItem.options, entry.name, entry.default)
+            }
+          })
+        }
+
+        if (dragItem.parent == targetNode.parent && component.container) {
+            var parentNode = this.$_.tree.findById(this.$store.state.editor.root, targetNode.parent)
+            var idx = this.$_.tree.getChildIndex(parentNode, targetNode)
+            targetNode = parentNode
+            dropTarget.idx = idx
+        }
+
         this.$_.tree.removeChild(this.$store.state.editor.root, dragItem)
         this.$_.tree.appendChild(targetNode, dragItem, dropTarget.idx)
         this.$forceUpdate()
@@ -134,7 +159,6 @@ export default {
     canDrop (event, target) {
       var dragName = this.$store.state.editor.drag.name
       if (this.$store.state.editor.drag.id == target.id) {
-        console.log('self!')
         event.preventDefault()
         event.stopPropagation()
         return
@@ -165,13 +189,9 @@ export default {
 </script>
 
 <style>
-div {
-  transition: border 500ms;
-}
 .ui-container {
   box-sizing: border-box;
   min-height:40px;
-  margin: 4px;
   padding: 4px;
   border: 2px solid gainsboro;
 }
