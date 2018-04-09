@@ -15,4 +15,9 @@ export default {
 .padded {
     padding: 12px;
 }
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 </style>

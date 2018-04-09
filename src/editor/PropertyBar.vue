@@ -4,8 +4,12 @@
   <ul class="menu-list">
     <li v-if="getActiveItem()">
         <div style="display: flex">
-        <span style="flex:1">{{getActiveItem().name}}</span>
-        <button class="button is-danger is-small is-right" @click="deleteActiveItem()"><i class="fa fa-trash"></i>Delete</button>
+        <span style="flex:1">
+            {{getActiveItem().name}}
+        </span>
+        <button class="button is-danger is-small is-right"
+            @click="deleteActiveItem()"
+            ><i class="fa fa-trash"></i>Delete</button>
         </div>
     </li>
     <li v-for="option in getOptions()">
@@ -14,7 +18,7 @@
         <input v-if="!option.content" class="input" type="text" :name="option.name" :value="option.value"
             @change="changed($event, option)"
         >
-        <textarea v-if="option.content" class="textarea" type="text" :name="option.name" v-html="option.value"
+        <textarea v-if="option.content" class="textarea" type="text" :name="option.name" v-model="option.value"
             @change="changed($event, option)"
         ></textarea>
       </a>
@@ -23,17 +27,18 @@
         <div class="control padded" v-if="getActiveItem()">
             <hr>
 
-        <input @keyup.enter="addAttribute()" class="input attr-name" type="text" placeholder="Attribute Name" v-model="newAttribute">
+        <input @change="addAttribute()" class="input attr-name" type="text" placeholder="Attribute Name" v-model="newAttribute">
         <button class="button is-small" @click="addAttribute()"><i class="fa fa-plus"></i>Add Attribute</button>
         </div>
     </li>
   </ul>
 
-    <ul xxv-if="getActiveItem()">
+  <div class="message padded is-info">
+    <ul>
       <li v-if="$store.state.editor.drag">Drag: {{$store.state.editor.drag.name}}</li>
       <li v-if="$store.state.editor.drop">Drop: {{$store.state.editor.drop.name}}</li>
-      <li v-if="$store.state.editor.active">Active: {{$store.state.editor.active.name}}</li>
     </ul>
+  </div>
 
     <!-- {{$store.state.editor.active}} -->
 </div>
@@ -58,6 +63,14 @@ export default {
         if (!item) {
             return
         }
+
+        // save this page
+        if (item.name == 'basic::page') {
+            item.page = item.options.name
+            this.$store.commit('editor/deletePage', item)
+            return
+        }
+
         this.$store.commit('editor/deleteItem', item)
     },
 
@@ -129,7 +142,8 @@ export default {
             return
         }
         var value = event.srcElement.value
-        // warning.. we're not state.committing here
+
+        // todo.. we're not correctly mutating state here
         if (!item.options) {
             this.$set(item, 'options', {})
         }
@@ -141,6 +155,13 @@ export default {
         } else {
             item.options[option.name] = value
         }
+
+        // save this page
+        if (item.id == 'basic::page') {
+            this.$store.commit('editor/savePage', item)
+        }
+
+        this.$parent.$forceUpdate()
     }
   },
 

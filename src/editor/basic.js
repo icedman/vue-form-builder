@@ -5,6 +5,18 @@ export default {
   title: 'Basic',
   templates: tpl,
   components: {
+    'page': {
+        name: 'page',
+        title: 'Page',
+        container: {
+            class: 'column'
+        },
+        options: [
+            { name: 'name', 'title': 'Name' },
+            { name: 'title', 'title': 'Title' },
+            { name: 'class', title: 'Class' }
+        ]
+    },
     'row': {
         name: 'row',
         title: 'Row',
@@ -56,11 +68,20 @@ export default {
     },
     'checkbox': {
         name: 'checkbox',
-        title: 'Checkbox'
+        title: 'Checkbox',
+        options: [
+            { name: 'class', title: 'Class' },
+            { name: 'label', title: 'Label', default: 'Checkbox' }
+        ]
     },
     'radio': {
         name: 'radio',
-        title: 'Radio'
+        title: 'Radio',
+        options: [
+            { name: 'class', title: 'Class' },
+            { name: 'label', title: 'Label', default: 'Radio' },
+            { name: 'name', title: 'Name' },
+        ]
     },
     'textarea': {
         name: 'textarea',

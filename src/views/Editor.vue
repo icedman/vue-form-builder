@@ -1,30 +1,30 @@
 <template>
 <ion-content class="full-height">
 
-<!--
-<section class="hero is-primary animated" :class="$store.state.ui.animate ? 'run-animated':null">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        Some Hero Banner
-      </h1>
-      <h2 class="subtitle">
-        And its description
-      </h2>
-    </div>
-  </div>
-</section>
--->
-
 <div class="workspace-container">
-<div class="padded" style="overflow-y: auto; min-height:1200px">
+<div class="fit-content padded bar">
 <sidebar></sidebar>
 </div>
 
-<ui-node v-if="!previewMode" :node="$store.state.editor.root" class="workspace padded"></ui-node>
-<rendered-node v-if="previewMode" :node="$store.state.editor.root" class="workspace padded"></rendered-node>
+<div class="fit-content workspace-inner" style="flex:1">
+  <div class="hero is-primary">
+    <div class="padded">
+      <div class="title">{{$store.state.editor.root.options.name}}
+        <button class="button is-primary" 
+        @click="renderForm()" style="float:right">
+        <span v-if="!previewMode"><i class="fa fa-eye icon-only"></i></span>
+        <span v-if="previewMode"><i class="fa fa-pencil icon-only"></i></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="padded">
+<ui-node v-if="!previewMode" :node="$store.state.editor.root" class="workspace"></ui-node>
+<rendered-node v-if="previewMode" :node="$store.state.editor.root"></rendered-node>
+  </div>
+</div>
 
-<div class="padded" style="overflow-y: auto;">
+<div class="fit-content padded bar">
 <property></property>
 </div>
 </div>
@@ -49,31 +49,37 @@ export default {
   },
 
   methods: {
-    loadFromLocalStorage () {
-      var localCopy = JSON.parse(window.localStorage.getItem('editor-root'))
-      if (localCopy) {
-        this.$store.commit('editor/setRoot', localCopy)
-      }
-      this.$forceUpdate()
+    loadProject () {
+      this.$store.dispatch('editor/loadProject')
     },
 
-    saveToLocalStorage () {
-      window.localStorage.setItem('editor-root', JSON.stringify(this.$store.state.editor.root))
+    saveProject () {
+      this.$store.dispatch('editor/saveProject')
+      this.$store.dispatch('editor/savePage', this.$store.state.editor.root)
     },
 
     renderForm () {
       this.$store.commit('editor/setActive', null)
       this.previewMode = !this.previewMode
+
+      if (this.previewMode) {
+        setTimeout(()=>{
+          var wrappers = document.querySelectorAll('.component-wrapper')
+          wrappers.forEach(n=>{
+            n.outerHTML = n.innerHTML
+          })
+        }, 250)
+      }
     }
   },
 
   mounted () {
     this.$store.commit('ui/setSubMenu', [
-        { cmd: ()=>this.loadFromLocalStorage(), title: 'Load', icon: 'fa fa-folder-open' },
-        { cmd: ()=>this.saveToLocalStorage(), title: 'Save', icon: 'fa fa-save' },
-        { cmd: ()=>this.renderForm(), title: 'Preview', icon: 'fa fa-cogs' }
+        { cmd: ()=>this.loadProject(), title: 'Load', icon: 'fa fa-folder-open' },
+        { cmd: ()=>this.saveProject(), title: 'Save', icon: 'fa fa-save' },
+        // { cmd: ()=>this.renderForm(), title: 'Settings', icon: 'fa fa-cog' }
       ])
-    this.loadFromLocalStorage()
+    this.loadProject()
   },
 
   beforeDestroyed() {
@@ -104,6 +110,9 @@ div {
 .workspace-container {
   display: flex;
 }
+.workspace-inner {
+  background: #e0e0e0;
+}
 .workspace {
   flex: 1;
   background: #f0f0f0;
@@ -112,6 +121,16 @@ div {
 }
 .workspace.ui-active.item {
   border: 2px solid transparent !important; 
+}
+.fit-content {
+  display: block;
+  overflow-y: scroll;
+}
+.bar {
+  max-width: 300px;
+}
+button i.fa.icon-only {
+  padding-right: 0px;
 }
 </style>
 

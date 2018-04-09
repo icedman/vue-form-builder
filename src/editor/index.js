@@ -16,10 +16,14 @@ class Editor {
             var tpl = parser.parseFromString(m.templates, 'text/xml')
             tpl.querySelectorAll('.ui-component').forEach(c=> {
                 try {
+                    var listItem = c.querySelector('.ui-list-item');
+                    if (listItem) {
+                        listItem = listItem.innerHTML
+                    }
                     module.components[c.id] = Object.assign(
                     (m.components[c.id] || {}),
                     {
-                        'list-item': c.querySelector('.ui-list-item').innerHTML,
+                        'list-item': listItem,
                         'template': c.querySelector('.ui-template').innerHTML,
                         'name': `${m.name}::${m.components[c.id].name}`,
                         'module': m.name,

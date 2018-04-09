@@ -1,6 +1,6 @@
 <template>
 <div :class="[containerClass]" v-bind="containerInject">
-  <div v-if="html" v-html="html"></div>
+  <div class="component-wrapper" v-if="html" v-html="html"></div>
   <rendered-node
     v-for="child in node.children"
       :node="child"
@@ -76,7 +76,7 @@ export default {
     containerClass () {
       if (!this.node)
         return null
-      if (this.node.id == 0) {
+      if (this.node.id == 'basic::page') {
         return null
       }
       var comp = this.$editor.getComponentByName(this.node.name)
@@ -96,3 +96,9 @@ export default {
 
 }
 </script>
+
+<style>
+.columns {
+  margin:0px !important;
+}
+</style>

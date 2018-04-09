@@ -4,9 +4,9 @@
       @drag="dragStart($event, node)" 
       @dragend="dragEnd($event, node)"
       @click="select($event, node)"
-      :draggable="node.id!==0" :class="[editorNodeClass, containerClass]">
-  <div v-if="html" v-html="html"></div>
-  <ui-node
+      :draggable="node.name!=='basic::page'" :class="[editorNodeClass, containerClass]">
+  <div v-if="html" v-html="html" @click="onClickHtmlRender($event, node)"></div>
+  <ui-node v-if="!node._hideChildren"
     v-for="child in node.children"
       :node="child"
       :key="child.id">
@@ -25,8 +25,13 @@ export default {
     html () {
       // todo move to renderer library
       var comp = this.$editor.getComponentByName(this.node.name)
-      if (this.node.id != 0 && comp.container) {
-        return `<span class="tag is-warning" style="">${comp.baseName}</span>`
+      if (this.node.id != 'basic::page' && comp.container) {
+        var ellipses = ''
+        if (this.node._hideChildren) {
+          ellipses = '...'
+        }
+        return `<span class="tag is-warning">${comp.baseName}${ellipses}</span>`
+        // return ''
       }
       if (comp && comp.template) {
         try {
@@ -68,12 +73,12 @@ export default {
     containerClass () {
       if (!this.node)
         return null
-      if (this.node.id == 0) {
+      if (this.node.id == 'basic::page') {
         return null
       }
       var comp = this.$editor.getComponentByName(this.node.name)
       if (comp.container) {
-        return ['ui-container', comp.container.class]
+        return ['ui-container', comp.container.class, this.node.options.class]
       }
       return ['ui-component']
     },
@@ -132,7 +137,7 @@ export default {
 
         var component = this.$editor.getComponentByName(dragItem.name)
 
-        // set defaults
+        // set defaults (todo!)
         if (component.options) {
           dragItem.options = dragItem.options || {}
           Object.values(component.options).forEach(entry=>{
@@ -143,13 +148,16 @@ export default {
           })
         }
 
-        if (dragItem.parent == targetNode.parent && component.container) {
+        if (targetNode.id !='basic::page' && dragItem.parent == targetNode.parent && component.container) {
             var parentNode = this.$_.tree.findById(this.$store.state.editor.root, targetNode.parent)
-            var idx = this.$_.tree.getChildIndex(parentNode, targetNode)
-            targetNode = parentNode
-            dropTarget.idx = idx
+            if (parentNode) {
+              var idx = this.$_.tree.getChildIndex(parentNode, targetNode)
+              targetNode = parentNode
+              dropTarget.idx = idx
+            }
         }
 
+        // move to state mutation
         this.$_.tree.removeChild(this.$store.state.editor.root, dragItem)
         this.$_.tree.appendChild(targetNode, dragItem, dropTarget.idx)
         this.$forceUpdate()
@@ -182,6 +190,14 @@ export default {
         event.stopPropagation()
         this.$store.commit('editor/setDrop', target)
       }
+    },
+
+    onClickHtmlRender(event, target) {
+      // console.log(target)
+      var comp = this.$editor.getComponentByName(this.node.name)
+      if (comp.container && event.srcElement.tagName == 'SPAN') {
+        this.$set(target, '_hideChildren', !target._hideChildren)
+      }
     }
   }
 
@@ -190,14 +206,13 @@ export default {
 
 <style>
 .ui-container {
-  box-sizing: border-box;
   min-height:40px;
   padding: 4px;
   border: 2px solid gainsboro;
+  background: #f0f0f0;
 }
 .ui-component {
-  box-sizing: border-box;
-  padding: 8px;
+  padding: 4px;
   min-height:40px;
   background: #f5f5f5;
   border: 2px solid gainsboro;
@@ -211,6 +226,19 @@ export default {
 }
 .ui-active-item {
   border: 2px solid black;
+}
+.ui-container.columns {
+  margin: 0px !important;
+}
+.ui-container.column {
+  margin: 0px !important;
+}
+
+.ui-container.columns span.tag,
+.ui-container.column span.tag {
+  position: relative;
+  top: -2px;
+  left: -2px;
 }
 </style>
 

@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Axios from 'axios'
+import Buefy from 'buefy'
 import Store from './stores'
 import Router from './routes'
 import { sync } from 'vuex-router-sync'
 import { _ } from './libs/lodash.js'
 
 import App from './App.vue'
-import 'bulma/css/bulma.css'
+// import 'bulma/css/bulma.css'
+import 'buefy/lib/buefy.css'
 import { Components } from './editor'
 
 Vue.prototype.$_ = _
@@ -26,7 +28,9 @@ Router.afterEach((to, from) => {
   setTimeout(() => { Store.commit('ui/setAnimate', true) }, 500)
 })
 
-window.addEventListener('resize', _.debounce(_.fitContent, 10))
+Vue.use(Buefy)
+
+window.addEventListener('resize', _.debounce(_.fitContent, 0))
 
 new Vue({
   el: '#app',

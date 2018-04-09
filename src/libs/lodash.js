@@ -126,7 +126,11 @@ const underscore = {
       var navHeight = nav.getBoundingClientRect().height
       var availableHeight = document.body.clientHeight - navHeight
       var content = document.querySelector('ion-content')
-      content.style.height = (availableHeight + 1) + 'px'
+      if (content) {
+        content.style.height = (availableHeight + 1) + 'px'
+      }
+      content = document.querySelectorAll('.fit-content')
+      content.forEach(c=>{c.style.height = (availableHeight + 1) + 'px'})
     }, 500); // next tick
   },
 
