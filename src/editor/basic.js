@@ -14,7 +14,8 @@ export default {
         options: [
             { name: 'name', 'title': 'Name' },
             { name: 'title', 'title': 'Title' },
-            { name: 'class', title: 'Class' }
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' }
         ]
     },
     'row': {
@@ -24,7 +25,8 @@ export default {
             class: 'columns'
         },
         options: [
-            { name: 'class', title: 'Class' }
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' }
         ]
     },
     'column': {
@@ -34,7 +36,8 @@ export default {
             class: 'column'
         },
         options: [
-            { name: 'class', title: 'Class' }
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' }
         ]
     },
     'container': {
@@ -44,7 +47,8 @@ export default {
             class: ''
         },
         options: [
-            { name: 'class', title: 'Class' }
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' }
         ]
     },
     'button': {

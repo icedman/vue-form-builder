@@ -4,7 +4,7 @@
         <i class="icon-sprite icon-link"> </i> <span>Link</span>
     </div>
     <div class="ui-template">
-        <a>${this.label}</a>
+        <a data-ui-inject="true">${this.label}</a>
     </div>
 </div>
 
@@ -13,7 +13,8 @@
         <i class="icon-sprite icon-image"> </i> <span>Image</span>
     </div>
     <div class="ui-template">
-        <i class="icon-sprite icon-image"> </i>
+        <!-- <i class="icon-sprite icon-image"> </i> -->
+        <img data-ui-inject="true"> </img>
     </div>
 </div>
 
@@ -22,7 +23,7 @@
         <i class="icon-sprite icon-heading"> </i> <span>Heading</span>
     </div>
     <div class="ui-template">
-        <h2>${this.label}</h2>
+        <h2 data-ui-inject="true">${this.label}</h2>
     </div>
 </div>
 
@@ -31,7 +32,7 @@
         <i class="icon-sprite icon-paragraph"> </i> <span>Paragraph</span>
     </div>
     <div class="ui-template">
-        <p>${this.content}</p>
+        <p data-ui-inject="true">${this.content}</p>
     </div>
 </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-<div :class="[containerClass]" v-bind="containerInject">
+<div :class="[containerClass]" :style="containerStyle" v-bind="containerInject">
   <div class="component-wrapper" v-if="html" v-html="html"></div>
   <rendered-node
     v-for="child in node.children"
@@ -88,6 +88,19 @@ export default {
         return [comp.container.class, nodeOptionClass]
       }
       return []
+    },
+
+    containerStyle () {
+      if (!this.node)
+        return null
+      if (this.node.id == 'basic::page') {
+        return null
+      }
+      var comp = this.$editor.getComponentByName(this.node.name)
+      if (comp.container && this.node.options.style) {
+        return this.node.options.style
+      }
+      return null
     }
   },
 

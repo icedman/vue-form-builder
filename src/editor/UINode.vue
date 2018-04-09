@@ -4,7 +4,9 @@
       @drag="dragStart($event, node)" 
       @dragend="dragEnd($event, node)"
       @click="select($event, node)"
-      :draggable="node.name!=='basic::page'" :class="[editorNodeClass, containerClass]">
+      :draggable="node.name!=='basic::page'"
+        :class="[editorNodeClass, containerClass]"
+        :style="containerStyle">
   <div v-if="html" v-html="html" @click="onClickHtmlRender($event, node)"></div>
   <ui-node v-if="!node._hideChildren"
     v-for="child in node.children"
@@ -81,6 +83,19 @@ export default {
         return ['ui-container', comp.container.class, this.node.options.class]
       }
       return ['ui-component']
+    },
+
+    containerStyle () {
+      if (!this.node)
+        return null
+      if (this.node.id == 'basic::page') {
+        return null
+      }
+      var comp = this.$editor.getComponentByName(this.node.name)
+      if (comp.container && this.node.options.style) {
+        return this.node.options.style
+      }
+      return null
     },
 
     editorNodeClass () {
