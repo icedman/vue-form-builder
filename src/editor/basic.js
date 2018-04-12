@@ -15,7 +15,8 @@ export default {
             { name: 'name', 'title': 'Name' },
             { name: 'title', 'title': 'Title' },
             { name: 'class', title: 'Class' },
-            { name: 'style', title: 'Style' }
+            { name: 'style', title: 'Style' },
+            { name: 'css', title: 'CSS', content: true },
         ]
     },
     'row': {
@@ -89,11 +90,21 @@ export default {
     },
     'textarea': {
         name: 'textarea',
-        title: 'Textarea'
+        title: 'Textarea',
+        options: [
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' },
+            { name: 'label', title: 'Label' }
+        ]
     },
     'select': {
         name: 'select',
-        title: 'Select'
+        title: 'Select',
+        options: [
+            { name: 'class', title: 'Class' },
+            { name: 'style', title: 'Style' },
+            { name: 'label', title: 'Label' }
+        ]
     }
   }
 }

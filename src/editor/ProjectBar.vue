@@ -6,15 +6,15 @@
   </p>  
 
   <button style="float:right; margin-bottom:4px" class="button is-small" @click="addPage()">
-    <i class="fa fa-plus"></i> Add Page</button>
+    <i class="fa fa-plus"></i> Add View</button>
 
   <br style="clear:both">
   <ul class="menu-list">
-    <li><a role="button" @click="togglePages()"><i class="fa fa-chevron-up" :class="showPages ? 'chevron-up':'chevron-down'"></i> <span class="menu-text">Pages</span></a>
+    <li><a role="button" @click="togglePages()"><i class="fa fa-chevron-up" :class="showPages ? 'chevron-up':'chevron-down'"></i> <span class="menu-text">Views</span></a>
       <ul v-if="showPages">
         <li v-for="(p, index) in pages" v-bind:key="'p' + index">
           <a role="button" :class="pageItemClass(p)" @click="loadPage(p)">
-            <i class="fa fa-file"></i> {{p.options.name}}</a>
+            <i class="fa fa-window-maximize"></i> {{p.options.name}}</a>
         </li>
       </ul>
     </li>

@@ -8,7 +8,7 @@
         :class="[editorNodeClass, containerClass]"
         :style="containerStyle">
   <div v-if="html" v-html="html" @click="onClickHtmlRender($event, node)"></div>
-  <ui-node v-if="!node._hideChildren"
+  <ui-node v-if="!node[':hideChildren']"
     v-for="child in node.children"
       :node="child"
       :key="child.id">
@@ -29,10 +29,14 @@ export default {
       var comp = this.$editor.getComponentByName(this.node.name)
       if (this.node.id != 'basic::page' && comp.container) {
         var ellipses = ''
-        if (this.node._hideChildren) {
+        if (this.node[':hideChildren']) {
           ellipses = '...'
         }
-        return `<span class="tag is-warning">${comp.baseName}${ellipses}</span>`
+        var name = ''
+        if (this.node.options && this.node.options.name) {
+          name = '::' + this.node.options.name
+        }
+        return `<span class="tag is-warning">${comp.baseName}${name}${ellipses}</span>`
         // return ''
       }
       if (comp && comp.template) {
@@ -62,7 +66,8 @@ export default {
             return res
           }
 
-          return options.compile('`'+comp.template+'`')
+          var template = comp.preview || comp.template
+          return options.compile('`'+template+'`')
         } catch(e) {
           // console.log(this.node.name +' ... template fail')
           console.log(e)
@@ -211,7 +216,7 @@ export default {
       // console.log(target)
       var comp = this.$editor.getComponentByName(this.node.name)
       if (comp.container && event.srcElement.tagName == 'SPAN') {
-        this.$set(target, '_hideChildren', !target._hideChildren)
+        this.$set(target, ':hideChildren', !target[':hideChildren'])
       }
     }
   }

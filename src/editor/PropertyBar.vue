@@ -7,7 +7,7 @@
         <span style="flex:1">
             {{getActiveItem().name}}
         </span>
-        <button class="button is-danger is-small is-right"
+        <button class="button is-danger is-right"
             @click="deleteActiveItem()"
             ><i class="fa fa-trash"></i>Delete</button>
         </div>
@@ -28,19 +28,23 @@
             <hr>
 
         <input @change="addAttribute()" class="input attr-name" type="text" placeholder="Attribute Name" v-model="newAttribute">
-        <button class="button is-small" @click="addAttribute()"><i class="fa fa-plus"></i>Add Attribute</button>
+        <button class="button" @click="addAttribute()"><i class="fa fa-plus"></i>Add Attribute</button>
         </div>
     </li>
   </ul>
 
-  <div class="message padded is-info">
+  <div class="message is-info" v-html="description()">
+  </div>
+
+<!--
+    <div class="message padded is-info">
     <ul>
       <li v-if="$store.state.editor.drag">Drag: {{$store.state.editor.drag.name}}</li>
       <li v-if="$store.state.editor.drop">Drop: {{$store.state.editor.drop.name}}</li>
     </ul>
-  </div>
+    </div>
+ -->
 
-    <!-- {{$store.state.editor.active}} -->
 </div>
 </aside>
 </template>
@@ -54,8 +58,19 @@ export default {
   },
 
   methods: {
-    getActiveItem() {
+    getActiveItem () {
         return this.$store.state.editor.active
+    },
+
+    description () {
+        if (!this.$store.state.editor.active) {
+            return null
+        }
+        // return this.$store.state.editor.active
+        var comp = this.$editor.getComponentByName(this.$store.state.editor.active.name)
+        if (comp && comp.description) {
+            return comp.description
+        }
     },
 
     deleteActiveItem() {
@@ -131,8 +146,16 @@ export default {
             this.$set(item, 'options', {})
         }
 
+        var value = attribute.split('=')
+        if (value.length) {
+            attribute=value[0]
+            value = value[1]
+        } else {
+            value = ''
+        }
+
         if (!item.options[attribute]) {
-            this.$set(item.options, attribute, '')
+            this.$set(item.options, attribute, value)
         }
     },
 
@@ -178,6 +201,7 @@ export default {
 .menu {
     transition: width 500ms;
     overflow-x: hidden;
+    zoom: 0.8;
 }
 button i {
     padding-right: 4px;

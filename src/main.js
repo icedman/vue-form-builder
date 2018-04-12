@@ -28,9 +28,13 @@ Router.afterEach((to, from) => {
   setTimeout(() => { Store.commit('ui/setAnimate', true) }, 500)
 })
 
-Vue.use(Buefy)
+Vue.use(Buefy, {
+  defaultIconPack: 'fa'
+})
 
 window.addEventListener('resize', _.debounce(_.fitContent, 0))
+
+Store.state.editor.baseUrl = 'http://localhost:8001/editor'
 
 new Vue({
   el: '#app',

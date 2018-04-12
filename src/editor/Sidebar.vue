@@ -2,11 +2,15 @@
 <div>
 <project-bar></project-bar>
 <aside class="menu" style="width:260px">
-  <div v-for="module in modules">
-  <p class="menu-label">
-    {{module.title}}
-  </p>  
-  <ul class="menu-list float-left">
+<p class="menu-label">
+    Components
+</p>
+<ul class="menu-list">
+  <li v-for="module in modules"> 
+    
+    <a role="button" @click="toggetShowComponents(module.name)"><i class="fa fa-chevron-up" :class="showComponents[module.name] ? 'chevron-up':'chevron-down'"></i> <span class="menu-text">{{module.title}}</span></a>
+
+  <ul class="float-left" v-if="showComponents[module.name]">
     <li draggable v-for="component in module.components" 
       @drag="dragStart($event, component)" 
       @dragend="dragEnd($event, component)"
@@ -16,8 +20,11 @@
       </a>
     </li>
   </ul>
-  <hr style="clear:both">
-  </div>
+
+  <div style="clear:both"></div>
+
+  </li>
+</ul>
 </aside>
 </div>
 </template>
@@ -27,6 +34,7 @@ import ProjectBar from './ProjectBar.vue'
 export default {
   data () {
     return {
+      showComponents: {},
       modules: []
     }
   },
@@ -46,6 +54,10 @@ export default {
       event.stopPropagation()
       this.$store.commit('editor/setDrag', null)
       this.$store.commit('editor/setDrop', null)
+    },
+
+    toggetShowComponents(module) {
+      this.$set(this.showComponents, module, !this.showComponents[module])
     }
   },
 
@@ -75,16 +87,33 @@ export default {
 </script>
 
 <style>
-.menu-list.float-left li {
+button i.fa {
+  padding-right:8px;
+}
+i.fa.fa-chevron-up {
+  width: 14px;
+  height: 14px;
+  transform-origin: 7px 9px;
+  transition: transform 150ms;
+  float:right;
+}
+.chevron-up {
+  transform: rotate(0deg);
+}
+.chevron-down {
+  transform: rotate(180deg);
+}
+
+.menu-list ul.float-left li {
   margin:0px;
   float:left;
 }
-.menu-list.float-left li a {
+.menu-list ul.float-left li a {
   border: 1px solid transparent;
   border-radius: 0px;
-  width: 120px;
+  width: 110px;
 }
-.menu-list i.fa {
+.menu-list ul i.fa {
   padding-right: 6px;
 }
 i.icon-sprite {
@@ -96,7 +125,7 @@ i.icon-sprite {
   background-size: cover;
   background-repeat: no-repeat;
   border: 2px solid transparent;
-  margin-left: 8px;
+  margin-left: 0px;
 }
 i.icon-sprite.icon-row {
   background-position: 0px calc(-84*0px);
@@ -121,6 +150,9 @@ i.icon-sprite.icon-textarea {
 }
 i.icon-sprite.icon-select {
   background-position: 0px calc(-84*19.06px);
+}
+i.icon-sprite.icon-switch {
+  background-position: 0px calc(-84*23.06px);
 }
 i.icon-sprite.icon-container {
   background-position: 0px calc(-84*29.15px);

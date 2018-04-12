@@ -4,12 +4,12 @@ import $http from 'axios'
 let createPage = function() { return { id: _.tree.guid(), name: 'basic::page', children: [], options: { name:'new page' } } }
 
 let state = {
-  baseUrl: 'http://localhost:8001/editor',
-  project: { name: '', export: '', pages: [ createPage() ] },
+  baseUrl: null,
+  project: { name: '', export: '', pages: [ createPage() ], lastOpened: null },
   root: createPage(),
   drag: null,
   drop: null,
-  active: null
+  active: null,
 }
 
 state.project.root = state.project.pages[0]
@@ -72,6 +72,35 @@ let actions = {
     })
   },
 
+  saveRenderedPage ({commit, state}, page) {
+    if (!state.baseUrl) {
+      return
+    }
+    var url = state.baseUrl + '/page/html'
+    $http.post (url, page)
+    .then(response=>{
+      console.log(response)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  },
+
+  deletePage ({commit, state}, page) {
+    commit('deletePage', page)
+    if (!state.baseUrl) {
+      return
+    }
+    var url = state.baseUrl + '/page'
+    $http.delete (url, page)
+    .then(response=>{
+      console.log(response)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  },
+
   loadProject ({commit, dispatch, state}) {
     if (!state.baseUrl) {
       dispatch('loadFromLocalStorage')
@@ -82,6 +111,7 @@ let actions = {
     .then(response=>{
       if (!response.data.pages) {
         // new project?
+        state.project.lastOpened = null
         state.project.pages = [ createPage() ]
         state.root = state.project.pages[0]
         return
@@ -94,9 +124,15 @@ let actions = {
           options: { name: p.title }
         }
       })
+
+      state.project.lastOpened = response.data.lastOpened
       state.project.pages = pages
       if (pages.length) {
-        dispatch('loadPage', pages[0])
+        var page = pages.find(p=>p.id == state.project.lastOpened)
+        if (!page) {
+          page = pages[0]
+        }
+        dispatch('loadPage', page)
       }
     })
     .catch(err=>{
@@ -115,6 +151,7 @@ let actions = {
     })
 
     var data = {
+      lastOpened: state.project.lastOpened,
       pages: pages
     }
 
@@ -149,6 +186,7 @@ let mutations = {
     },
     setRoot (state, root) {
         state.root = root
+        state.project.lastOpened = root.id
         // update project name pages list
         var page = state.project.pages.find(p=>p.id == root.id)
         page.options = root.options
@@ -188,6 +226,7 @@ let mutations = {
 
       state.active = state.project.pages[0]
       state.root = state.project.pages[0]
+      state.project.lastOpened = null
 
     },
 }

@@ -56,19 +56,48 @@ export default {
     saveProject () {
       this.$store.dispatch('editor/saveProject')
       this.$store.dispatch('editor/savePage', this.$store.state.editor.root)
+
+      var page = this.$store.state.editor.root
+      var rendered = this.$editor.render(page)
+      this.$store.dispatch('editor/saveRenderedPage', { 
+        id:page.id,
+        filename: page.options[':filename'],
+        pretty: page.options[':pretty'],
+        css: page.options['css'],
+        code: page.options['code'],
+        html:rendered
+        }
+      )
     },
 
     renderForm () {
       this.$store.commit('editor/setActive', null)
       this.previewMode = !this.previewMode
 
+
       if (this.previewMode) {
         setTimeout(()=>{
+
+          /*
           var wrappers = document.querySelectorAll('.component-wrapper')
           wrappers.forEach(n=>{
             n.outerHTML = n.innerHTML
           })
-        }, 250)
+          */
+
+          var css = document.querySelector('#rendercss')
+          if (!css) {
+            css = document.createElement('style')
+            css.setAttribute('id', 'rendercss')
+            document.body.appendChild(css)
+          }
+          css.innerHTML = this.$store.state.editor.root.options.css
+        }, 0)
+      } else {
+        var css = document.querySelector('#rendercss')
+        if (css) {
+          css.innerHTML = ''
+        }
       }
     }
   },
@@ -131,6 +160,9 @@ div {
 }
 button i.fa.icon-only {
   padding-right: 0px;
+}
+.ui-component .icon-sprite {
+  margin-left:-12px;
 }
 </style>
 

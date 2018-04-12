@@ -25,15 +25,6 @@
     </div>
     <div class="ui-template">
     </div>
-    <div class="ui-description">
-        <div class="padded">
-            <ul>
-            <li>
-                Specify a :tag attribute. Default is 'DIV'
-            </li>
-            </ul>
-        </div>
-    </div>
 </div>
 
 <div class="ui-component" id="button">
@@ -50,10 +41,7 @@
         <i class="icon-sprite icon-text"> </i> <span>Input Text</span>
     </div>
     <div class="ui-template">
-        <div class="field">
-            <label class="label">${this.label}</label>
         <input class="input ${this.class}" type="text" data-ui-inject="true" value=""/>
-        </div>
     </div>
 </div>
 
@@ -62,10 +50,28 @@
         <i class="icon-sprite icon-checkbox"> </i> <span>Checkbox</span>
     </div>
     <div class="ui-template">
-        <label class="checkbox ${this.class}">
-        <input type="checkbox" data-ui-inject="true"/>
-            ${this.label}
-        </label>
+        <b-checkbox data-ui-inject="true">
+        ${this.label}
+        </b-checkbox>
+    </div>
+    <div class="ui-preview">
+        <i class="icon-sprite icon-checkbox"> </i>
+    </div>
+</div>
+
+<div class="ui-component" id="switch">
+    <div class="ui-list-item">
+        <i class="icon-sprite icon-switch"> </i> <span>switch</span>
+    </div>
+    <div class="ui-template">
+        <div class="field">
+        <b-switch data-ui-inject="true">
+        ${this.label}
+        </b-switch>
+        </div>
+    </div>
+    <div class="ui-preview">
+        <i class="icon-sprite icon-switch"> </i>
     </div>
 </div>
 
@@ -74,10 +80,30 @@
         <i class="icon-sprite icon-radio"> </i> <span>Radio</span>
     </div>
     <div class="ui-template">
-        <label class="radio ${this.class}">
-        <input type="radio" name="{$this.name}" data-ui-inject="true"/>
+        <b-radio data-ui-inject="true">
             ${this.label} 
-        </label>
+        </b-radio>
+    </div>
+    <div class="ui-preview">
+        <i class="icon-sprite icon-radio"> </i>
+    </div>
+</div>
+
+<div class="ui-component" id="date">
+    <div class="ui-list-item">
+        <i class="icon-sprite icon-select"> </i> <span>Date</span>
+    </div>
+    <div class="ui-template">
+    <b-field label="${this.label}">
+        <b-datepicker
+            icon="calendar"
+            data-ui-inject="true">
+        </b-datepicker>
+    </b-field>
+
+    </div>
+    <div class="ui-preview">
+        <i class="icon-sprite icon-select"> </i>
     </div>
 </div>
 
@@ -97,10 +123,7 @@
         <i class="icon-sprite icon-textarea"> </i> <span>Textarea</span>
     </div>
     <div class="ui-template">
-        <div class="field">
-            <label class="label">${this.label}</label>
         <textarea class="textarea ${this.class}" type="text" data-ui-inject="true"> </textarea>
-        </div>
     </div>
 </div>
 
