@@ -120,7 +120,7 @@ i.icon-sprite {
   display: block;
   width: 80px;
   height: 50px;
-  background: url('/dist/components-sprite.png');
+  background: url('/editor/editor/components-sprite.png');
   background-position:  0px calc(-84*0px);
   background-size: cover;
   background-repeat: no-repeat;

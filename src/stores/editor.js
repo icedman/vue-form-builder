@@ -106,7 +106,7 @@ let actions = {
       dispatch('loadFromLocalStorage')
       return
     }
-    var url = state.baseUrl
+    var url = state.baseUrl + '/project'
     $http.get (url)
     .then(response=>{
       if (!response.data.pages) {
@@ -155,7 +155,7 @@ let actions = {
       pages: pages
     }
 
-    var url = state.baseUrl
+    var url = state.baseUrl + '/project'
     $http.post (url, data)
     .then(response=>{
       console.log(response)

@@ -104,7 +104,7 @@ if (process.env.NODE_ENV === 'production') {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, './src/assets'),
-        to: path.resolve(__dirname, './dist'),
+        to: path.resolve(__dirname, './dist/editor'),
         ignore: ['.*']
       }
     ]),

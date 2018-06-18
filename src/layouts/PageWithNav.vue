@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style>
-ion-content.full-height {
+/*ion-content.full-height {
   height: 100vh;
-}
+}*/
 </style>
