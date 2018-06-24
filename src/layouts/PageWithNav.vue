@@ -31,7 +31,8 @@ export default {
 </script>
 
 <style>
-/*ion-content.full-height {
+ion-page,
+ion-content {
   height: 100vh;
-}*/
+}
 </style>

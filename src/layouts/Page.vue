@@ -25,6 +25,7 @@ export default {
 </script>
 
 <style>
+ion-page,
 ion-content {
   height: 100vh;
 }

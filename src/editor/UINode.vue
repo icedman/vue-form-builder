@@ -36,8 +36,8 @@ export default {
         if (this.node.options && this.node.options.name) {
           name = '::' + this.node.options.name
         }
-        // return `<span class="tag is-warning">${comp.baseName}${name}${ellipses}</span>`
-        return ''
+        return `<span class="tag is-warning">${comp.baseName}${name}${ellipses}</span>`
+        // return ''
       }
       if (comp && comp.template) {
         try {

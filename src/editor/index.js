@@ -136,7 +136,7 @@ class Editor {
           Object.keys(options).forEach(k => {
             var value = options[k]
             
-            if (this._excludedAttributes.indexOf(k) != -1 || k[0] == ':') {
+            if (this._excludedAttributes.indexOf(k) != -1) { // } || k[0] == ':') {
               return
             }
 
