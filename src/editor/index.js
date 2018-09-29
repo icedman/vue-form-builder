@@ -6,7 +6,17 @@ import Buefy from './buefy.js'
 class Editor {
     constructor(components) {
         this.modules = {}
-        this._excludedAttributes = ['class','style','content','css','label']
+        this._excludedAttributes = [
+          'class',
+          'style',
+          'content',
+          'css',
+          'label',
+          ':pretty',
+          ':filename',
+          ':begin',
+          ':end'
+        ]
         var modules = Object.values(components.modules)
 
         var parser = new DOMParser()
@@ -194,16 +204,19 @@ class Editor {
             
             if (k == ':tag') {
               tag = options[k]
+              return;
             }
             if (k == ':begin') {
               begin = options[k]
+              return;
             }
             if (k == ':end') {
               end = options[k]
+              return;
             }
 
             var value = options[k]
-            if (this._excludedAttributes.indexOf(k) != -1 || k[0] == ':') {
+            if (this._excludedAttributes.indexOf(k) != -1) { //} || k[0] == ':') {
               return
             }
             attributes.push(`${k}="${value}"`)

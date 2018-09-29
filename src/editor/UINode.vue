@@ -27,7 +27,7 @@ export default {
     html () {
       // todo move to renderer library
       var comp = this.$editor.getComponentByName(this.node.name)
-      if (this.node.id != 'basic::page' && comp.container) {
+      if (this.node.id != 'basic::page' && comp && comp.container) {
         var ellipses = ''
         if (this.node[':hideChildren']) {
           ellipses = '...'
@@ -84,7 +84,7 @@ export default {
         return null
       }
       var comp = this.$editor.getComponentByName(this.node.name)
-      if (comp.container) {
+      if (comp && comp.container) {
         return ['ui-container', comp.container.class, this.node.options.class]
       }
       return ['ui-component']
@@ -97,7 +97,7 @@ export default {
         return null
       }
       var comp = this.$editor.getComponentByName(this.node.name)
-      if (comp.container && this.node.options.style) {
+      if (comp && comp.container && this.node.options.style) {
         return this.node.options.style
       }
       return null
@@ -158,7 +158,7 @@ export default {
         var component = this.$editor.getComponentByName(dragItem.name)
 
         // set defaults (todo!)
-        if (component.options) {
+        if (component && component.options) {
           dragItem.options = dragItem.options || {}
           Object.values(component.options).forEach(entry=>{
             if (!(dragItem.options[entry.name] || !dragItem.options[entry.name]=='')
@@ -215,7 +215,7 @@ export default {
     onClickHtmlRender(event, target) {
       // console.log(target)
       var comp = this.$editor.getComponentByName(this.node.name)
-      if (comp.container && event.srcElement.tagName == 'SPAN') {
+      if (comp && comp.container && event.srcElement.tagName == 'SPAN') {
         this.$set(target, ':hideChildren', !target[':hideChildren'])
       }
     }

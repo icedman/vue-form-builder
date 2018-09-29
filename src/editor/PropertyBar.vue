@@ -104,7 +104,7 @@ export default {
         var component = this.$editor.getComponentByName(item.name)
         var opts = []
         var defs = []
-        if (component.options) {
+        if (component && component.options) {
             defs = [...component.options]
         }
         if (item.options) {
